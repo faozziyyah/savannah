@@ -136,19 +136,19 @@ const UsersTable = () => {
 
   return (
 
-    <div className='flex w-full flex-col gap-12'>
+    <div className='flex flex-col gap-12 w-[80%] m-auto'>
 
-        <h1 className=''>Users</h1>
+        <h1 className='mt-8 font-semibold text-4xl'>Users</h1>
 
         {isLoading ? (
           <Loader />
         ) : (
           <>
-            <div className='mx-auto max-w-[90vw] overflow-x-scroll rounded-lg border border-2 bg-white px-2  py-4 md:max-w-[95vw] lg:mx-0 lg:max-w-full'>
+            <div className='mx-auto max-w-[90vw] overflow-x-scroll rounded-lg border border-gray-300 bg-white px-2  py-4 md:max-w-[95vw] lg:mx-0 lg:max-w-full'>
               
               <Table className=''>
                 
-                <TableHeader className='border-0 [&_tr]:border-b-0'>
+                <TableHeader className='border-0 [&_tr]:border-b-0 border-b-gray-300'>
                   {table.getHeaderGroups().map((headerGroup) => (
                     <TableRow key={headerGroup.id} className='border-0'>
                       {headerGroup.headers.map((header) => {
@@ -169,7 +169,7 @@ const UsersTable = () => {
                     table.getRowModel().rows.map((row) => (
                       <TableRow key={row.id}
                         data-state={row.getIsSelected() && 'selected'}
-                        className='border-t-0'
+                        className='border-t-0 border-t-gray-300'
                       >
                         {row.getVisibleCells().map((cell) => (
                           <TableCell key={cell.id}>
