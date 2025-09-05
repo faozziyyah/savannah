@@ -14,6 +14,14 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '.
 import Loader from '../../components/Loaders/loader';
 import { Button } from '../../components/shadcn/ui/button';
 
+export interface Address {
+  id: string;
+  user_id: string;
+  street: string;
+  state: string;
+  city: string;
+  zipcode: string;
+}
 
 export type users = {
   id: number;
@@ -21,6 +29,7 @@ export type users = {
   username: string;
   email: string;
   phone: string;
+  addresses?: Address[];
 };
 
 export type usertable = {
@@ -46,7 +55,6 @@ const UsersTable = () => {
     const [hasNextPage, setHasNextPage] = useState(false);
     const [hasPreviousPage, setHasPreviousPage] = useState(false);
     const [pageIndex, setPageIndex] = useState(0);
-    const navigate = useNavigate();
 
     useEffect(() => {
 
@@ -66,12 +74,12 @@ const UsersTable = () => {
             currentPage: currentPage, 
           });
 
-          //console.log(response)
+          //console.log(response.users)
 
-          setData(response);
-          setDataCount(response.count);
-          setHasNextPage(!!response.next);
-          setHasPreviousPage(!!response.previous);
+          setData(response.users);
+          setDataCount(response.pagination.totalUsers);
+          setHasNextPage(response.pagination.hasNextPage);
+          setHasPreviousPage(response.pagination.hasPreviousPage);
         } catch (error) {
           console.error('Error Fetching Data', error);
           setNetworkError(true);
@@ -84,7 +92,7 @@ const UsersTable = () => {
 
       fetchData();
     }, [pageIndex, pageSize, currentPage, paginationModel]);
-    console.log(data)
+    //console.log(data)
 
     const pagination = useMemo(
       () => ({
@@ -110,11 +118,18 @@ const UsersTable = () => {
             </Link>,
         },
         {
-          id: 'email',
+          id: 'addresses',
           header: 'Address',
-          cell: ({ row }) => <Link to={`/users/${row.original.id}`}>
-                <div className='capitalize'>{row.original.email}</div>
-            </Link>,
+          cell: ({ row }) => {
+            const addresses = row.original.addresses;
+            if (!addresses?.length) return <div>No Address</div>;
+            const first = addresses[0]; // show first in table
+            return (
+                <Link to={`/users/${row.original.id}`}>
+                    <div>{first.street}, {first.city}, {first.state}, {first.zipcode}</div>
+                </Link>
+            );
+          },
         },
     ];
 
@@ -206,7 +221,7 @@ const UsersTable = () => {
 
                 <Button
                   variant='outline'
-                  size='sm'
+                  size='sm' className='cursor-pointer'
                   onClick={() => {
                     table.previousPage(), setCurrentPage(currentPage - 1);
                   }}
@@ -218,7 +233,7 @@ const UsersTable = () => {
 
                 <Button
                   variant='outline'
-                  size='sm'
+                  size='sm' className='cursor-pointer'
                   onClick={() => { 
                     table.nextPage(), 
                     setCurrentPage(currentPage + 1);

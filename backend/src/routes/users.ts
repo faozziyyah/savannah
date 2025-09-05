@@ -1,19 +1,54 @@
 import { Router, Request, Response } from "express";
-import { getUsers, getUsersCount, addUserAdder, getUserAdders } from "../db/users/users";
+import { getUsers, getUsersCount, addUserAdder, getUserAdders, getUsersWithAddresses } from "../db/users/users";
 
 const router = Router();
 
-router.get("/", async (req: Request, res: Response) => {
+/*router.get("/", async (req: Request, res: Response) => {
+
   const pageNumber = Number(req.query.pageNumber) || 0;
   const pageSize = Number(req.query.pageSize) || 4;
+
   if (pageNumber < 0 || pageSize < 1) {
     res.status(400).send({ message: "Invalid page number or page size" });
     return;
   }
 
-  const users = await getUsers(pageNumber, pageSize);
+  const users = await getUsersWithAddresses(pageNumber, pageSize);
   res.send(users);
+  
+});*/
+
+router.get("/", async (req: Request, res: Response): Promise<void> => {
+  const pageNumber = Number(req.query.pageNumber) || 0;
+  const pageSize = Number(req.query.pageSize) || 4;
+
+  if (pageNumber < 0 || pageSize < 1) {
+    res.status(400).send({ message: "Invalid page number or page size" });
+    return;
+  }
+
+  try {
+    const users = await getUsersWithAddresses(pageNumber, pageSize);
+    const totalUsers = await getUsersCount();
+    const totalPages = Math.ceil(totalUsers / pageSize);
+
+    res.send({
+      users,
+      pagination: {
+        pageNumber,
+        pageSize,
+        totalUsers,
+        totalPages,
+        hasNextPage: pageNumber + 1 < totalPages,
+        hasPreviousPage: pageNumber > 0,
+      },
+    });
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    res.status(500).send({ error: "Failed to fetch users" });
+  }
 });
+
 
 router.get("/count", async (req: Request, res: Response) => {
   const count = await getUsersCount();
