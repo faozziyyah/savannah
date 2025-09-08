@@ -1,12 +1,11 @@
-import * as React from 'react';
+import type { ColumnDef, } from '@tanstack/react-table';
 import {
-  ColumnDef,
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { Button } from 'components/shadcn/ui/button';
+import { Button } from '../shadcn/ui/button';
 import {
   Table,
   TableBody,
@@ -14,7 +13,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from 'components/shadcn/ui/table';
+} from '../shadcn/ui/table';
 
 type GenericTableProps<T> = {
   columns: ColumnDef<T>[];

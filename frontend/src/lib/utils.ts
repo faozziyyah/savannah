@@ -10,14 +10,14 @@ export const formatDate = (i: string) => {
   return moment(i).format('MMM Do YY');
 };
 
-export const sentenceCase = (str) => {
+export const sentenceCase = (str: string) => {
   if (!str) return '';
 
   // return str;/
   return str?.charAt(0).toUpperCase() + str?.slice(1)?.toLowerCase();
 };
 
-export function sentenceCaseEachWord(str) {
+export function sentenceCaseEachWord(str: string) {
   if (str) {
     return str
       .split(' ')
@@ -44,7 +44,7 @@ export function sentenceCaseEachWord(str) {
 //   return parts.join(',');
 // }
 
-export function splitAmountByThousands(amount) {
+export function splitAmountByThousands(amount: string) {
   if (!amount) return '0.00';
   amount = amount.toString().trim(); // Remove leading and trailing spaces
   const parts = [];

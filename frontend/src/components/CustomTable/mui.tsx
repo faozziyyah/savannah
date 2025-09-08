@@ -1,6 +1,20 @@
-import React from 'react';
+//import React from 'react';
 import { Paper, Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
+import type { GridRowsProp, GridColDef, GridPaginationModel, GridColumnVisibilityModel } from '@mui/x-data-grid';
+
+type CustomDataTableProps = {
+  rows: GridRowsProp;
+  columns: GridColDef[];
+  rowCount: number;
+  pageSizeOptions?: number[];
+  paginationModel: GridPaginationModel;
+  isLoading?: boolean;
+  isError?: boolean;
+  onPaginationModelChange: (model: GridPaginationModel) => void;
+  columnVisibilityModel?: GridColumnVisibilityModel;
+  onColumnVisibilityModelChange?: (model: GridColumnVisibilityModel) => void;
+};
 
 const CustomDataTable = ({
     rows,
@@ -14,7 +28,7 @@ const CustomDataTable = ({
     columnVisibilityModel = undefined, 
     onColumnVisibilityModelChange = undefined,
     
-}) => {
+}: CustomDataTableProps) => {
     return (
         <Paper className="w-full">
             {isLoading ? (

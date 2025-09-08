@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
 import { fetchAllUsersWithPagination } from '../../services';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   flexRender,
   getCoreRowModel,
@@ -106,14 +106,14 @@ const UsersTable = () => {
         {
           id: 'name',
           header: 'Full Name',
-          cell: ({ row }) => <Link to={`/users/${row.original.id}`}>
+          cell: ({ row }) => <Link to={`/users/${row.original.id}`} state={{ name: row.original.name, email: row.original.email }}>
                 <div className='capitalize'>{row.original.name}</div>
             </Link>,
         },
         {
           id: 'email',
           header: ' Email Address',
-          cell: ({ row }) => <Link to={`/users/${row.original.id}`}>
+          cell: ({ row }) => <Link to={`/users/${row.original.id}`} state={{ name: row.original.name, email: row.original.email }}>
                 <div className='capitalize'>{row.original.email}</div>
             </Link>,
         },
@@ -125,7 +125,7 @@ const UsersTable = () => {
             if (!addresses?.length) return <div>No Address</div>;
             const first = addresses[0]; // show first in table
             return (
-                <Link to={`/users/${row.original.id}`}>
+                <Link to={`/users/${row.original.id}`} state={{ name: row.original.name, email: row.original.email }}>
                     <div>{first.street}, {first.city}, {first.state}, {first.zipcode}</div>
                 </Link>
             );
